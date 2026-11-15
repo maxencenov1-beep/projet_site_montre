@@ -16,6 +16,20 @@ $user = env('DB_USERNAME');    // ex : xxxxxxxx.root
 $pass = env('DB_PASSWORD');
 $port = env('DB_PORT', '4000'); // 4000 pour TiDB
 
+// Diagnostic : si une variable n'est pas définie (ex. oubliée sur Vercel), on le dit clairement
+$manquantes = [];
+foreach (['DB_HOST', 'DB_NAME', 'DB_USERNAME', 'DB_PASSWORD'] as $nom) {
+    if (env($nom) === null || env($nom) === '') {
+        $manquantes[] = $nom;
+    }
+}
+if ($manquantes) {
+    http_response_code(500);
+    die("<p style='font-family:sans-serif;padding:2rem'>Variables d'environnement manquantes : "
+        . implode(', ', $manquantes)
+        . "<br>Ajoute-les dans Vercel (Settings → Environment Variables) puis fais Redeploy.</p>");
+}
+
 $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
 
 $options = [
