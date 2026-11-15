@@ -1,42 +1,51 @@
--- Active: 1772795269981@@bruno-pokemon-brunopaul1412-baa0.d.aivencloud.com@24379@bruno_pokedex_bdd
+-- Structure de la base catalogue_montres (TiDB Cloud)
 
-CREATE DATABASE maxence_pokedex_bdd;
+CREATE DATABASE IF NOT EXISTS catalogue_montres;
 
-USE maxence_pokedex_bdd;
+USE catalogue_montres;
 
-CREATE TABLE type(
-   type_id INT,
-   type_nom VARCHAR(50),
-   PRIMARY KEY(type_id)
+CREATE TABLE marques (
+  id_marque INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(100) NOT NULL,
+  pays_origine VARCHAR(100) DEFAULT NULL,
+  annee_creation SMALLINT DEFAULT NULL,
+  PRIMARY KEY (id_marque),
+  UNIQUE KEY nom (nom)
 );
 
-CREATE TABLE stats(
-   stats_id INT,
-   stats_pv INT,
-   stats_attaque INT,
-   stats_defense INT,
-   stats_attaque_speciale INT,
-   stats_defense_speciale INT,
-   stats_vitesse INT,
-   PRIMARY KEY(stats_id)
+CREATE TABLE categories (
+  id_categorie INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_categorie),
+  UNIQUE KEY nom (nom)
 );
 
-CREATE TABLE pokemon(
-   pokemon_id INT,
-   pokemon_nom VARCHAR(50),
-   pokemon_img VARCHAR(2048),
-   pokemon_description TEXT,
-   pokemon_taille DECIMAL(15,2),
-   pokemon_poids DECIMAL(15,2),
-   stats_id INT NOT NULL,
-   PRIMARY KEY(pokemon_id),
-   FOREIGN KEY(stats_id) REFERENCES stats(stats_id)
+CREATE TABLE mouvements (
+  id_mouvement INT NOT NULL AUTO_INCREMENT,
+  type VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_mouvement),
+  UNIQUE KEY type (type)
 );
 
-CREATE TABLE assoc_pokemon_type(
-   pokemon_id INT,
-   type_id INT,
-   PRIMARY KEY(pokemon_id, type_id),
-   FOREIGN KEY(pokemon_id) REFERENCES pokemon(pokemon_id),
-   FOREIGN KEY(type_id) REFERENCES type(type_id)
+CREATE TABLE montres (
+  id_montre INT NOT NULL AUTO_INCREMENT,
+  reference VARCHAR(50) NOT NULL,
+  nom VARCHAR(150) NOT NULL,
+  id_marque INT NOT NULL,
+  id_categorie INT DEFAULT NULL,
+  id_mouvement INT DEFAULT NULL,
+  prix DECIMAL(10,2) DEFAULT NULL,
+  description TEXT,
+  matiere_boitier VARCHAR(100) DEFAULT NULL,
+  matiere_bracelet VARCHAR(100) DEFAULT NULL,
+  couleur_cadran VARCHAR(50) DEFAULT NULL,
+  diametre_mm DECIMAL(5,2) DEFAULT NULL,
+  etancheite_m INT DEFAULT NULL,
+  image_url VARCHAR(255) DEFAULT NULL,
+  date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_montre),
+  UNIQUE KEY reference (reference),
+  FOREIGN KEY (id_marque) REFERENCES marques (id_marque) ON DELETE CASCADE,
+  FOREIGN KEY (id_categorie) REFERENCES categories (id_categorie) ON DELETE SET NULL,
+  FOREIGN KEY (id_mouvement) REFERENCES mouvements (id_mouvement) ON DELETE SET NULL
 );

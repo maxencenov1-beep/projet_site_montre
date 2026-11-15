@@ -1,4 +1,3 @@
-<?php 
-header("Location: pages/pokedex.php");
+<?php
+header("Location: pages/accueil.php");
 exit();
-?>

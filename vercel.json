@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.3",
+      "includeFiles": "{config,includes,pages}/**"
+    }
+  },
+  "routes": [
+    { "src": "/", "dest": "/api/index.php" },
+    { "src": "/index\\.php", "dest": "/api/index.php" },
+    { "src": "/pages/.*", "dest": "/api/index.php" },
+    { "src": "/(config|includes|vendor|api)(/.*)?", "status": 404 },
+    { "src": "/(composer\\.(json|lock)|\\.env.*)", "status": 404 }
+  ]
+}
